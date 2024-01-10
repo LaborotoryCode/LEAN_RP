@@ -7,13 +7,14 @@ from dotenv import load_dotenv
 from langchain.llms import OpenAI
 from langchain.evaluation import load_evaluator
 import warnings
+
 warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 
 global string_data
 
-load_dotenv('/Users/Ayaan/LEAN/env.txt')
+load_dotenv('../env.txt')
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 llm = OpenAI(

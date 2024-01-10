@@ -16,7 +16,7 @@ global question
 
 # i love lean!!!!!!
 
-load_dotenv('/Users/Ayaan/LEAN/env.txt')
+load_dotenv('./env.txt')
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 llm = OpenAI(
