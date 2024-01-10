@@ -25,28 +25,20 @@ llm = OpenAI(
 evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
 
 
-def main():
+def student():
     st.markdown("# Student")
     st.sidebar.header("Student")
-    number_of_students = st.chat_input("Number of Students", key=uuid.uuid4())
-    if number_of_students is not None:
-        number_of_students = int(number_of_students)
-        ans = []
-        for _ in range(number_of_students):
-            input_file = st.file_uploader("Upload Student's Answer", key=uuid.uuid4())
-            if input_file is not None:
-                # To read file as bytes:
-                bytes_data = input_file.getvalue()
+    feedback = ""
 
-                # To convert to a string based IO:
-                stringio = StringIO(input_file.getvalue().decode("utf-8"))
+    uploaded_files = st.file_uploader("Input a student's file", accept_multiple_files=True)
 
-                # To read file as string:
-                string_data = stringio.read()
-                st.write(string_data)
-            print(string_data)
-            ans.append(string_data)
-        return ans
+    for uploaded_file in uploaded_files:
+        bytes_data = uploaded_file.read()
+        st.write("Filename:", uploaded_file.name)
+        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        teacher_data = stringio.read()
+        st.write(teacher_data)
+        st.write("\n")
 
 if __name__ == "__main__":
-    main()
+    student()
