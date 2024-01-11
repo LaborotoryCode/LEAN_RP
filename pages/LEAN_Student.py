@@ -22,15 +22,6 @@ st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 # else:
 #     question = st.session_state.question
 
-try:
-    teacher_data = st.session_state.teacher_data
-except:
-    teacher_data = ""
-try:
-    question = st.session_state.question
-except:
-    question = ""
-
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 llm = OpenAI(
@@ -42,6 +33,15 @@ evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
 
 
 def main():
+    try:
+        teacher_data = st.session_state.teacher_data
+    except:
+        teacher_data = ""
+    try:
+        question = st.session_state.question
+    except:
+        question = ""
+
     st.markdown("# Student")
     
     feedback = ""
@@ -58,7 +58,6 @@ def main():
     except:
         st.write("")
     
-    ans = main()
     solution_txt = teacher_data
     question_prompt = question
     
@@ -71,7 +70,8 @@ def main():
         teacher_data = stringio.read()
         st.write(teacher_data)
         st.write("\n")
-        
+    
+    print(st.session_state)
 
 
 if __name__ == "__main__":

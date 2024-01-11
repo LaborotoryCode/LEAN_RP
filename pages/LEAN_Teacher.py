@@ -44,6 +44,7 @@ def main():
             st.session_state['teacher_data'] = teacher_data
         else:
             st.session_state.teacher_data = teacher_data
+        # print("teacher: ", st.session_state.teacher_data)
         st.write(teacher_data)
 
         # if 'teacher_data' not in st.session_state:
@@ -53,13 +54,15 @@ def main():
     st.write("""
                 Enter the problem that you gave your students to solve below:
              """)
-    question = st.chat_input("Input the problem", key=uuid.uuid4())
+    question = st.chat_input("Input the problem", key=1)
+    if 'question' not in st.session_state:
+        st.session_state['question'] = question
+    else:
+        st.session_state.question = question
+    # print("question:", question)
 
-    if question:
-        if 'question' not in st.session_state:
-            st.session_state['question'] = question
-        else:
-            st.session_state.question = question
+    # print(st.session_state)
+
 
 if __name__ == "__main__":
     main()
