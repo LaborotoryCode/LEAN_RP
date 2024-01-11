@@ -14,7 +14,7 @@ st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 global string_data
 global feedback
 
-load_dotenv('/Users/Ayaan/LEAN/env.txt')
+load_dotenv('../env.txt')
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 llm = OpenAI(
@@ -33,7 +33,6 @@ def main():
     uploaded_files = st.file_uploader("Input a student's file", accept_multiple_files=True)
 
     for uploaded_file in uploaded_files:
-        bytes_data = uploaded_file.read()
         st.write("Filename:", uploaded_file.name)
         stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
         teacher_data = stringio.read()
