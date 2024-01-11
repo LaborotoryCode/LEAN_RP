@@ -1,5 +1,4 @@
 import openai
-from st_pages import show_pages, Page
 import uuid
 import streamlit as st
 from io import StringIO
@@ -12,13 +11,12 @@ warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Teacher", page_icon="👨‍🏫")
 
-
 global teacher_data
 global question
 
 # i love lean!!!!!!
 
-load_dotenv('../env.txt')
+load_dotenv('/Users/Ayaan/LEAN/env.txt')
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 llm = OpenAI(
@@ -29,15 +27,12 @@ llm = OpenAI(
 evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
 
 
-def teacher():
+def main():
     st.markdown("# Teacher")
-    st.sidebar.header("Teacher")
-    show_pages(
-        [
-            Page("pages/LEAN_Student.py", "student"),
-            Page("pages/LEAN_Teacher.py", "teacher")
-        ]
-    )
+
+    st.write("""For the teacher:
+             Please upload the model answer to the question in the form of a .py file
+             """)
     uploaded_file = st.file_uploader("Choose a file")
 
     if uploaded_file is not None:
@@ -58,7 +53,6 @@ def teacher():
     question = st.chat_input("Input the problem", key=uuid.uuid4())
 
 
-
 #def placeholder(): #IGNORE THIS IF YOU SEE IT
     #assuming ayaan has the thing working and all the files are in strings
     #student_ans = query_students()
@@ -67,7 +61,7 @@ def teacher():
     #    
 
 if __name__ == "__main__":
-    teacher()
+    main()
 
 
         

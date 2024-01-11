@@ -7,14 +7,14 @@ from dotenv import load_dotenv
 from langchain.llms import OpenAI
 from langchain.evaluation import load_evaluator
 import warnings
-
 warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 
 global string_data
+global feedback
 
-load_dotenv('../env.txt')
+load_dotenv('/Users/Ayaan/LEAN/env.txt')
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 llm = OpenAI(
@@ -25,9 +25,9 @@ llm = OpenAI(
 evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
 
 
-def student():
+def main():
     st.markdown("# Student")
-    st.sidebar.header("Student")
+    
     feedback = ""
 
     uploaded_files = st.file_uploader("Input a student's file", accept_multiple_files=True)
@@ -39,6 +39,8 @@ def student():
         teacher_data = stringio.read()
         st.write(teacher_data)
         st.write("\n")
+        
+
 
 if __name__ == "__main__":
-    student()
+    main()
