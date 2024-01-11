@@ -4,8 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-load_dotenv('./env.txt')
-FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
+FIREBASE_WEB_API_KEY = st.secrets["FIREBASE_WEB_API_KEY"]
 
 ## -------------------------------------------------------------------------------------------------
 ## Firebase Auth API -------------------------------------------------------------------------------

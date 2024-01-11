@@ -14,8 +14,7 @@ st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 global string_data
 global feedback
 
-load_dotenv('../env.txt')
-openai_api_key = os.getenv('OPENAI_API_KEY')
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 llm = OpenAI(
     openai_api_key=openai_api_key,

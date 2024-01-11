@@ -16,8 +16,7 @@ global question
 
 # i love lean!!!!!!
 
-load_dotenv('../env.txt')
-openai_api_key = os.getenv('OPENAI_API_KEY')
+openai_api_key = st.secrets("OPENAI_API_KEY")
 
 llm = OpenAI(
     openai_api_key=openai_api_key,
