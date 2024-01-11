@@ -1,6 +1,5 @@
 import streamlit as st
 import auth_functions
-from . import LEAN_Teacher
 from streamlit_extras.switch_page_button import switch_page
 
 if 'user_info' not in st.session_state:

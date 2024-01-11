@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import uuid
 import streamlit as st
 from io import StringIO
@@ -11,12 +11,9 @@ warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Teacher", page_icon="👨‍🏫")
 
-global teacher_data
-global question
-
 # i love lean!!!!!!
 
-openai_api_key = st.secrets("OPENAI_API_KEY")
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 llm = OpenAI(
     openai_api_key=openai_api_key,
@@ -36,13 +33,21 @@ def main():
 
     if uploaded_file is not None:
         # To read file as bytes:
+        bytes_data = uploaded_file.getvalue()
 
         # To convert to a string based IO:
         stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
 
         # To read file as string:
         teacher_data = stringio.read()
+        if 'teacher_data' not in st.session_state:
+            st.session_state['teacher_data'] = teacher_data
+        else:
+            st.session_state.teacher_data = teacher_data
         st.write(teacher_data)
+
+        # if 'teacher_data' not in st.session_state:
+        #     st.session_state['teacher_data'] = teacher_data
         #eval_result = evaluator.evaluate_strings(input=question,prediction=,reference=string_data)
 
     st.write("""
@@ -50,13 +55,11 @@ def main():
              """)
     question = st.chat_input("Input the problem", key=uuid.uuid4())
 
-
-#def placeholder(): #IGNORE THIS IF YOU SEE IT
-    #assuming ayaan has the thing working and all the files are in strings
-    #student_ans = query_students()
-    #for ans in student_ans:
-    #    eval_results = evaluator.evaluate_strings(input=question,prediction=ans,reference=string_data)
-    #    
+    if question:
+        if 'question' not in st.session_state:
+            st.session_state['question'] = question
+        else:
+            st.session_state.question = question
 
 if __name__ == "__main__":
     main()

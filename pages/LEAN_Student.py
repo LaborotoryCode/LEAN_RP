@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import uuid
 import streamlit as st
 from io import StringIO
@@ -7,15 +7,29 @@ from dotenv import load_dotenv
 from langchain.llms import OpenAI
 from langchain.evaluation import load_evaluator
 import sys
-import LEAN_Teacher
 
 import warnings
 warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 
-teacher_data = st.session_state.teacher_data
-question = st.session_state.question
+# if not st.session_state.teacher_data:
+#     teacher_data = None
+# else:
+#     teacher_data = st.session_state.teacher_data
+# if not st.session_state.question:
+#     question = None
+# else:
+#     question = st.session_state.question
+
+try:
+    teacher_data = st.session_state.teacher_data
+except:
+    teacher_data = ""
+try:
+    question = st.session_state.question
+except:
+    question = ""
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -32,14 +46,21 @@ def main():
     
     feedback = ""
 
-    uploaded_files = st.file_uploader("Input a student's file", accept_multiple_files=True)
+    uploaded_files = st.file_uploader("Input a student's file", accept_multiple_files=True, key=uuid.uuid4())
 
-    st.write(teacher_data)
-    st.write(question)
+    try:
+        st.write(teacher_data)
+    except:
+        st.write("")
+    # st.write(question)
+    try:
+        st.write(question)
+    except:
+        st.write("")
     
     ans = main()
-    solution_txt = LEAN_Teacher.teacher_data
-    question_prompt = LEAN_Teacher.question
+    solution_txt = teacher_data
+    question_prompt = question
     
     print(solution_txt)
     print(question_prompt)
