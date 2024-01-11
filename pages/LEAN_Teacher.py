@@ -16,6 +16,8 @@ global text
 
 st.set_page_config(page_title="Teacher", page_icon="👨‍🏫")
 
+realans = ['', 'abc', 'edf']
+
 # i love lean!!!!!!
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -83,7 +85,7 @@ def main():
 
     student_files = st.file_uploader("Input the model answer in the form of a .py file", accept_multiple_files=True)
 
-
+    i=1
     for file in student_files:
         # To convert to a string based IO:
         stringio3 = StringIO(file.getvalue().decode("utf-8"))
@@ -104,9 +106,10 @@ def main():
         prompt = PromptTemplate(template=template,input_variables=["marks","reason"])
         chain = LLMChain(llm=llm,prompt=prompt,verbose=False)
 
-
+        st.write("Student ", i)
         st.write(f'Reasoning: {eval_result["reasoning"]}')
-        st.write(chain.run(marks=3,reason=test))
+        st.write(chain.run(marks=max_marks,reason=test))
+        i += 1
 
 
     
