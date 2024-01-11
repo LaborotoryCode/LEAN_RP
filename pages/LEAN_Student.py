@@ -6,13 +6,16 @@ import os
 from dotenv import load_dotenv
 from langchain.llms import OpenAI
 from langchain.evaluation import load_evaluator
+import sys
+import LEAN_Teacher
+
 import warnings
 warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Student", page_icon="👨‍🎓")
 
-global string_data
-global feedback
+teacher_data = st.session_state.teacher_data
+question = st.session_state.question
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -30,6 +33,16 @@ def main():
     feedback = ""
 
     uploaded_files = st.file_uploader("Input a student's file", accept_multiple_files=True)
+
+    st.write(teacher_data)
+    st.write(question)
+    
+    ans = main()
+    solution_txt = LEAN_Teacher.teacher_data
+    question_prompt = LEAN_Teacher.question
+    
+    print(solution_txt)
+    print(question_prompt)
 
     for uploaded_file in uploaded_files:
         st.write("Filename:", uploaded_file.name)
