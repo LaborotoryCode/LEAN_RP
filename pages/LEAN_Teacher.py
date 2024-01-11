@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from langchain.llms import OpenAI
 from langchain.evaluation import load_evaluator
 import warnings
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 warnings.filterwarnings("ignore")
 
 global title
@@ -24,6 +26,7 @@ llm = OpenAI(
 )
 
 evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
+
 
 
 
@@ -64,12 +67,11 @@ def main():
     with st.form("my_form"):
         st.write("Input the max marks for the question: ")
         max_marks = st.slider("Form slider")
-        checkbox_val = st.checkbox("Form checkbox")
 
         # Every form must have a submit button.
         submitted = st.form_submit_button("Submit")
         if submitted:
-            st.write("slider", max_marks, "checkbox", checkbox_val)
+            st.write("slider", max_marks, "checkbox")
     
     
 
@@ -79,17 +81,32 @@ def main():
 
     st.title('Student:')
 
-    students_files = st.file_uploader("Input a student's file", accept_multiple_files=False, key=uuid.uuid4())
+    student_files = st.file_uploader("Input the model answer in the form of a .py file", accept_multiple_files=True)
 
-    for file in students_files:
-        if students_files is not None:
 
-            # To convert to a string based IO:
-            stringio3 = StringIO(students_files.getvalue().decode("utf-8"))
+    for file in student_files:
+        # To convert to a string based IO:
+        stringio3 = StringIO(file.getvalue().decode("utf-8"))
 
-            # To read file as string:
-            student_data = stringio3.read()
-            st.write(student_data)
+        # To read file as string:
+        student_data = stringio3.read()
+        correctness_test_1=student_data
+        reference=teacher_data
+        
+        eval_result = evaluator.evaluate_strings(
+            input=question,
+            prediction=correctness_test_1,
+            reference=reference,
+        )
+
+        test = eval_result["reasoning"]
+        template = "If the question is worth {marks} marks, based on your reasoning: {reason},how many marks would you award the solution?"
+        prompt = PromptTemplate(template=template,input_variables=["marks","reason"])
+        chain = LLMChain(llm=llm,prompt=prompt,verbose=False)
+
+
+        st.write(f'Reasoning: {eval_result["reasoning"]}')
+        st.write(chain.run(marks=3,reason=test))
 
 
     
