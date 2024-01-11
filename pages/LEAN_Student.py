@@ -51,12 +51,12 @@ def main():
     try:
         st.write(teacher_data)
     except:
-        st.write("")
+        st.write("NO")
     # st.write(question)
     try:
         st.write(question)
     except:
-        st.write("")
+        st.write("NIG")
     
     ans = main()
     solution_txt = teacher_data
@@ -65,13 +65,7 @@ def main():
     print(solution_txt)
     print(question_prompt)
 
-    for uploaded_file in uploaded_files:
-        st.write("Filename:", uploaded_file.name)
-        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-        teacher_data = stringio.read()
-        st.write(teacher_data)
-        st.write("\n")
-        
+    
 
 
 if __name__ == "__main__":
