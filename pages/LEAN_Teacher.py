@@ -9,6 +9,9 @@ from langchain.evaluation import load_evaluator
 import warnings
 warnings.filterwarnings("ignore")
 
+global title
+global text
+
 st.set_page_config(page_title="Teacher", page_icon="👨‍🏫")
 
 # i love lean!!!!!!
@@ -23,46 +26,73 @@ llm = OpenAI(
 evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
 
 
+
 def main():
+
+    title = "Teacher"
+    text = """For the teacher:
+             Please upload the model answer to the question in the form of a .py file
+             """
+
     st.markdown("# Teacher")
 
-    st.write("""For the teacher:
-             Please upload the model answer to the question in the form of a .py file
-             """)
-    uploaded_file = st.file_uploader("Choose a file")
+    st.write("## Question")
+    question_file = st.file_uploader("Input the question in the form of a text file")
 
-    if uploaded_file is not None:
-        # To read file as bytes:
-        bytes_data = uploaded_file.getvalue()
+    if question_file is not None:
 
         # To convert to a string based IO:
-        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        stringio1 = StringIO(question_file.getvalue().decode("utf-8"))
 
         # To read file as string:
-        teacher_data = stringio.read()
-        if 'teacher_data' not in st.session_state:
-            st.session_state['teacher_data'] = teacher_data
-        else:
-            st.session_state.teacher_data = teacher_data
-        # print("teacher: ", st.session_state.teacher_data)
+        question = stringio1.read()
+        st.write(question)
+    
+    
+    st.write("## Model Answer")
+    answer_file = st.file_uploader("Input the model answer in the form of a .py file")
+
+    if answer_file is not None:
+
+        # To convert to a string based IO:
+        stringio2 = StringIO(answer_file.getvalue().decode("utf-8"))
+
+        # To read file as string:
+        teacher_data = stringio2.read()
         st.write(teacher_data)
+
+    with st.form("my_form"):
+        st.write("Input the max marks for the question: ")
+        max_marks = st.slider("Form slider")
+        checkbox_val = st.checkbox("Form checkbox")
+
+        # Every form must have a submit button.
+        submitted = st.form_submit_button("Submit")
+        if submitted:
+            st.write("slider", max_marks, "checkbox", checkbox_val)
+    
+    
 
         # if 'teacher_data' not in st.session_state:
         #     st.session_state['teacher_data'] = teacher_data
         #eval_result = evaluator.evaluate_strings(input=question,prediction=,reference=string_data)
 
-    st.write("""
-                Enter the problem that you gave your students to solve below:
-             """)
-    question = st.chat_input("Input the problem", key=1)
-    if 'question' not in st.session_state:
-        st.session_state['question'] = question
-    else:
-        st.session_state.question = question
-    # print("question:", question)
+    st.title('Student:')
 
-    # print(st.session_state)
+    students_files = st.file_uploader("Input a student's file", accept_multiple_files=False, key=uuid.uuid4())
 
+    for file in students_files:
+        if students_files is not None:
+
+            # To convert to a string based IO:
+            stringio3 = StringIO(students_files.getvalue().decode("utf-8"))
+
+            # To read file as string:
+            student_data = stringio3.read()
+            st.write(student_data)
+
+
+    
 
 if __name__ == "__main__":
     main()

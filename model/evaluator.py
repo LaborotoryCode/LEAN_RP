@@ -13,18 +13,8 @@ llm = OpenAI(
     model='gpt-3.5-turbo-instruct'
 )
 
-evaluator = load_evaluator("labeled_criteria", criteria="correctness", llm=llm)
-
-# Kopi C Kosong
-# Black coffee with evaporated milk and no sugar – think of it as a cafe au lait
-# ref: https://thehoneycombers.com/singapore/order-kopi-singapore/
-
-
-
-# test 1
-
-def evaluate(question, student, teacher_data, marks, reason):
-    correctness_test_1=f'''{student}'''
+def evaluate(evaluator, question, student_code, teacher_data, marks, reason):
+    correctness_test_1=f'''{student_code}'''
 
     reference=f'''{teacher_data}'''
 
@@ -34,12 +24,9 @@ def evaluate(question, student, teacher_data, marks, reason):
         reference=reference,
     )
 
-    test = eval_result["reasoning"]
     template = f"If the question is worth {marks} marks, based on your reasoning: {reason},how many marks would you award the solution?"
     prompt = PromptTemplate(template=template,input_variables=["marks","reason"])
     chain = LLMChain(llm=llm,prompt=prompt,verbose=False)
 
+    return [chain.run(marks=marks,reason=reason), eval_result["reasoning"]]
 
-
-# print(f'Reasoning: {eval_result["reasoning"]}')
-# print(chain.run(marks=3,reason=test))
